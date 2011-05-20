@@ -4,16 +4,21 @@ conways_rules = (num_neighbors, alive = true) ->
   else
     num_neighbors == 3
 
-how_many_alive = (grid, row, col) ->
-  sum = 0
+neighbor_coordinates = (grid, row, col) ->
+  neighbors = []
   for delta_row in [-1..1]
     for delta_col in [-1..1]
       do (delta_row, delta_col) ->
         [x, y] = [row + delta_row, col + delta_col]
-        if x == row and y == col
-          true
-        else if grid[x]? and grid[x][y]?
-          sum += grid[x][y]
+        unless x == row and y == col
+          neighbors.push([x, y])
+  neighbors
+
+how_many_alive = (grid, row, col) ->
+  sum = 0
+  for [x, y] in neighbor_coordinates(grid, row, col)
+    if grid[x]? and grid[x][y]?
+      sum += grid[x][y]
   sum
 
 
