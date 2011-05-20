@@ -4,23 +4,14 @@ conways_rules = (num_neighbors, alive = true) ->
   else
     num_neighbors == 3
 
-how_many_alive = (grid, position) ->
-  callback = (prev, current, index) ->
-    if index == position
-      prev
-    else if adjacent(position, index)
-      prev + current
-    else
-      prev
-  grid.reduce (callback)
-
-adjacent = (position, index) ->
-  switch position
-    when 1 then index in [0..5]
-    when 3 then index in [0,1,4,6,7]
-    when 4 then index in [0...9]
-    when 5 then index in [1,2,4,7,8]
-    when 7 then index in [3..8]
+how_many_alive = (grid, row, col) ->
+  sum = 0
+  for delta_row in [-1..1]
+    for delta_col in [-1..1]
+      do (delta_row, delta_col) ->
+        [x, y] = [row + delta_row][col + delta_col]
+        if grid[x]? and grid[x][y]?
+          sum += grid[x][y]
 
 
 describe "Conway's Game of Life", ->
@@ -55,28 +46,29 @@ describe "Conway's Game of Life", ->
       describe "that is empty", ->
         beforeEach ->
           @test_grid = [
-            0, 0, 0,
-            0, 0, 0,
-            0, 0, 0
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
           ]
 
-        for cell in [0...9]
-          do (cell) ->
-            it "position #{cell} has 0 neighbors", ->
-              expect(how_many_alive(@test_grid, cell)).toEqual(0)
+        for row in [0...3]
+          for col in [0...3]
+            do (row, col) ->
+              it "position #{row},#{col} has 0 neighbors", ->
+                expect(how_many_alive(@test_grid, row, col)).toEqual(0)
 
       describe "that is full", ->
         beforeEach ->
           @test_grid = [
-            1, 1, 1,
-            1, 1, 1,
-            1, 1, 1,
+            [1, 1, 1],
+            [1, 1, 1],
+            [1, 1, 1],
           ]
 
         it "normal case has 8 neighbors", ->
           expect(how_many_alive(@test_grid, 4)).toEqual(8)
 
-        for side in [1, 3, 5, 7]
-          do (side) ->
+        for row, col in [[0, 1], [1, 0], [1, 2], [2, 1]]
+          do (row, col) ->
             it "side case #{side} has 5 neighbors", ->
-              expect(how_many_alive(@test_grid, side)).toEqual(5)
+              expect(how_many_alive(@test_grid, row, col)).toEqual(5)
