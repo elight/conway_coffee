@@ -6,11 +6,22 @@ conways_rules = (num_neighbors, alive = true) ->
 
 how_many_alive = (grid, position) ->
   callback = (prev, current, index) ->
-    if index == 4
+    if index == position
       prev
-    else
+    else if adjacent(position, index)
       prev + current
-  grid.reduce(callback)
+    else
+      prev
+  grid.reduce (callback)
+
+adjacent = (position, index) ->
+  switch position
+    when 1 then index in [0..5]
+    when 3 then index in [0,1,4,6,7]
+    when 4 then index in [0...9]
+    when 5 then index in [1,2,4,7,8]
+    when 7 then index in [3..8]
+
 
 describe "Conway's Game of Life", ->
 
@@ -67,5 +78,5 @@ describe "Conway's Game of Life", ->
 
         for side in [1, 3, 5, 7]
           do (side) ->
-            it "side case "+ side +" has 5 neighbors", ->
+            it "side case " + side + " has 5 neighbors", ->
               expect(how_many_alive(@test_grid, side)).toEqual(5)
