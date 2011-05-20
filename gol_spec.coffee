@@ -14,6 +14,10 @@ neighbor_coordinates = (grid, row, col) ->
           neighbors.push([x, y])
   neighbors
 
+transition = (grid) ->
+  grid
+
+
 how_many_alive = (grid, row, col) ->
   sum = 0
   for [x, y] in neighbor_coordinates(grid, row, col)
@@ -65,6 +69,9 @@ describe "Conway's Game of Life", ->
               it "position #{row},#{col} has 0 neighbors", ->
                 expect(how_many_alive(@test_grid, row, col)).toEqual(0)
 
+        it "should transition to its next state", ->
+          expect(transition(@test_grid)).toEqual(@test_grid)
+
       describe "that is full", ->
         beforeEach ->
           @test_grid = [
@@ -80,3 +87,16 @@ describe "Conway's Game of Life", ->
           do (side) ->
             it "side case #{side} has 5 neighbors", ->
               expect(how_many_alive(@test_grid, side[0], side[1])).toEqual(5)
+
+        for corner in [[0, 0], [0, 2], [2, 0], [2, 2]]
+          do (corner) ->
+            it "corner case #{corner} has 3 neighbors", ->
+              expect(how_many_alive(@test_grid, corner[0], corner[1])).toEqual(3)
+
+        it "should transition to its next state", ->
+          expected = [
+            [1, 0, 1],
+            [0, 0, 0],
+            [1, 0, 1],
+          ]
+          expect(transition(@test_grid)).toEqual(expected)
