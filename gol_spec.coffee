@@ -1,5 +1,9 @@
-conways_rules = (num_neighbors) -> 
-  true if num_neighbors in [2,3]
+conways_rules = (num_neighbors, alive = true) -> 
+  if alive
+    num_neighbors in [2,3]
+  else
+    num_neighbors == 3
+
 
 describe "Conway's Game of Life", -> 
 
@@ -23,5 +27,4 @@ describe "Conway's Game of Life", ->
       for num_neighbors in [0, 1, 2, 4, 5, 6, 7, 8]
         do (num_neighbors) ->
           it "should die when it has " + num_neighbors + " neighbors", ->
-            expect(conways_rules(num_neighbors)).toBeFalsy()
-            
+            expect(conways_rules(num_neighbors, false)).toBeFalsy()
