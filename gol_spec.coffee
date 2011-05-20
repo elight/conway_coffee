@@ -15,7 +15,21 @@ neighbor_coordinates = (grid, row, col) ->
   neighbors
 
 transition = (grid) ->
-  grid
+  next_grid = Array(3)
+  for row in [0..2]
+    for col in [0..2]
+      do (row, col) ->
+        alive = grid[row][col]?
+        neighbors = how_many_alive(grid, row, col)
+
+        next_grid[row] or= Array(3)
+
+        next_grid[row][col] = if conways_rules(neighbors, alive)
+          1
+        else
+          0
+
+  next_grid
 
 
 how_many_alive = (grid, row, col) ->
