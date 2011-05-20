@@ -30,12 +30,12 @@ describe "Conway's Game of Life", ->
     describe "Living cell with", ->
       for num_neighbors in [0, 1, 4, 5, 6, 7, 8]
         do (num_neighbors) ->
-          it "should die when it has " + num_neighbors + " neighbors", ->
+          it "should die when it has #{num_neighbors} neighbors", ->
             expect(conways_rules(num_neighbors)).toBeFalsy()
 
       for num_neighbors in [2, 3]
         do (num_neighbors) ->
-          it "should live when it has " + num_neighbors + " neighbors", ->
+          it "should live when it has #{num_neighbors} neighbors", ->
             expect(conways_rules(num_neighbors)).toBeTruthy()
 
     describe "Dead cell ", ->
@@ -44,7 +44,7 @@ describe "Conway's Game of Life", ->
 
       for num_neighbors in [0, 1, 2, 4, 5, 6, 7, 8]
         do (num_neighbors) ->
-          it "should die when it has " + num_neighbors + " neighbors", ->
+          it "should die when it has #{num_neighbors} neighbors", ->
             expect(conways_rules(num_neighbors, false)).toBeFalsy()
 
 
@@ -62,7 +62,7 @@ describe "Conway's Game of Life", ->
 
         for cell in [0...9]
           do (cell) ->
-            it "position " + cell + "has 0 neighbors", ->
+            it "position #{cell} has 0 neighbors", ->
               expect(how_many_alive(@test_grid, cell)).toEqual(0)
 
       describe "that is full", ->
@@ -78,5 +78,5 @@ describe "Conway's Game of Life", ->
 
         for side in [1, 3, 5, 7]
           do (side) ->
-            it "side case " + side + " has 5 neighbors", ->
+            it "side case #{side} has 5 neighbors", ->
               expect(how_many_alive(@test_grid, side)).toEqual(5)
