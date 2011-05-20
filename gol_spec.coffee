@@ -9,9 +9,12 @@ how_many_alive = (grid, row, col) ->
   for delta_row in [-1..1]
     for delta_col in [-1..1]
       do (delta_row, delta_col) ->
-        [x, y] = [row + delta_row][col + delta_col]
-        if grid[x]? and grid[x][y]?
+        [x, y] = [row + delta_row, col + delta_col]
+        if x == row and y == col
+          true
+        else if grid[x]? and grid[x][y]?
           sum += grid[x][y]
+  sum
 
 
 describe "Conway's Game of Life", ->
@@ -66,9 +69,9 @@ describe "Conway's Game of Life", ->
           ]
 
         it "normal case has 8 neighbors", ->
-          expect(how_many_alive(@test_grid, 4)).toEqual(8)
+          expect(how_many_alive(@test_grid, 1, 1)).toEqual(8)
 
-        for row, col in [[0, 1], [1, 0], [1, 2], [2, 1]]
-          do (row, col) ->
+        for side in [[0, 1], [1, 0], [1, 2], [2, 1]]
+          do (side) ->
             it "side case #{side} has 5 neighbors", ->
-              expect(how_many_alive(@test_grid, row, col)).toEqual(5)
+              expect(how_many_alive(@test_grid, side[0], side[1])).toEqual(5)
