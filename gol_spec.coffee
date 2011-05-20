@@ -15,20 +15,14 @@ neighbor_coordinates = (grid, row, col) ->
   neighbors
 
 transition = (grid) ->
-  next_grid = Array(3)
-  for row in [0..2]
-    for col in [0..2]
+  next_grid = Array(grid.length)
+  for row in [0...grid.length]
+    for col in [0...grid.length]
       do (row, col) ->
         alive = grid[row][col]?
         neighbors = how_many_alive(grid, row, col)
-
-        next_grid[row] or= Array(3)
-
-        next_grid[row][col] = if conways_rules(neighbors, alive)
-          1
-        else
-          0
-
+        next_grid[row] or= Array(grid.length)
+        next_grid[row][col] = if conways_rules(neighbors, alive) then 1 else 0
   next_grid
 
 
@@ -112,5 +106,44 @@ describe "Conway's Game of Life", ->
             [1, 0, 1],
             [0, 0, 0],
             [1, 0, 1],
+          ]
+          expect(transition(@test_grid)).toEqual(expected)
+
+
+    describe "(4x4)", ->
+
+      describe "that is full", ->
+        beforeEach ->
+          @test_grid = [
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+          ]
+
+        it "should transition to its next state", ->
+          expected = [
+            [1, 0, 0, 1],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [1, 0, 0, 1]
+          ]
+          expect(transition(@test_grid)).toEqual(expected)
+
+    describe "(4x3)", ->
+
+      describe "that is full", ->
+        beforeEach ->
+          @test_grid = [
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+          ]
+
+        it "should transition to its next state", ->
+          expected = [
+            [1, 0, 0, 1],
+            [0, 0, 0, 0],
+            [1, 0, 0, 1]
           ]
           expect(transition(@test_grid)).toEqual(expected)
