@@ -4,7 +4,13 @@ conways_rules = (num_neighbors, alive = true) ->
   else
     num_neighbors == 3
 
-how_many_alive = (grid, index) -> 0
+how_many_alive = (grid, position) ->
+  callback = (prev, current, index) ->
+    if index == 4
+      prev
+    else
+      prev + current
+  grid.reduce(callback)
 
 describe "Conway's Game of Life", ->
 
@@ -30,16 +36,36 @@ describe "Conway's Game of Life", ->
           it "should die when it has " + num_neighbors + " neighbors", ->
             expect(conways_rules(num_neighbors, false)).toBeFalsy()
 
-  describe "The Grid", ->
-    describe "(3x3) that is empty", ->
-      beforeEach ->
-        @test_grid = [
-          0, 0, 0,
-          0, 0, 0,
-          0, 0, 0
-        ]
 
-      for cell in [0...9]
-        do (cell) ->
-          it "position " + cell + "has 0 neighbors", ->
-            expect(how_many_alive(@test_grid, cell)).toEqual(0)
+  describe "The Grid", ->
+
+    describe "(3x3)", ->
+
+      describe "that is empty", ->
+        beforeEach ->
+          @test_grid = [
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
+          ]
+
+        for cell in [0...9]
+          do (cell) ->
+            it "position " + cell + "has 0 neighbors", ->
+              expect(how_many_alive(@test_grid, cell)).toEqual(0)
+
+      describe "that is full", ->
+        beforeEach ->
+          @test_grid = [
+            1, 1, 1,
+            1, 1, 1,
+            1, 1, 1,
+          ]
+
+        it "normal case has 8 neighbors", ->
+          expect(how_many_alive(@test_grid, 4)).toEqual(8)
+
+        for side in [1, 3, 5, 7]
+          do (side) ->
+            it "side case "+ side +" has 5 neighbors", ->
+              expect(how_many_alive(@test_grid, side)).toEqual(5)
