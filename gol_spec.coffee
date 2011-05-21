@@ -17,12 +17,13 @@ neighbor_coordinates = (grid, row, col) ->
 transition = (grid) ->
   [height, width, next_grid] = [grid.length, grid[0].length, []]
   for row in [0...height]
-    for col in [0...width]
-      do (row, col) ->
-        alive = grid[row][col]?
-        neighbors = how_many_alive(grid, row, col)
-        next_grid[row] or= []
-        next_grid[row][col] = if conways_rules(neighbors, alive) then 1 else 0
+    do (row) ->
+      next_grid[row] = []
+      for col in [0...width]
+        do (col) ->
+          alive = grid[row][col]?
+          neighbors = how_many_alive(grid, row, col)
+          next_grid[row][col] = if conways_rules(neighbors, alive) then 1 else 0
   next_grid
 
 
