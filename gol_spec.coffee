@@ -28,11 +28,10 @@ transition = (grid) ->
 
 
 how_many_alive = (grid, row, col) ->
-  sum = 0
-  for [x, y] in neighbor_coordinates(grid, row, col)
-    if grid[x]? and grid[x][y]?
-      sum += grid[x][y]
-  sum
+  callback = (prev, current) ->
+    [x, y] = current
+    if grid[x]? and grid[x][y]? then prev += grid[x][y] else prev
+  neighbor_coordinates(grid, row, col).reduce(callback, 0)
 
 
 describe "Conway's Game of Life", ->
