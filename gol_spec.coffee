@@ -47,7 +47,7 @@ describe "Conway's Game of Life", ->
 
     describe "Dead cell ", ->
       it "should live when it has 3 neighbors", ->
-        expect(conways_rules(3)).toBeTruthy()
+        expect(conways_rules(3, false)).toBeTruthy()
 
       for num_neighbors in [0, 1, 2, 4, 5, 6, 7, 8]
         it "should die when it has #{num_neighbors} neighbors", ->
