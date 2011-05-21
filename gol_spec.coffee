@@ -32,7 +32,10 @@ class Grid
   how_many_alive: (row, col) ->
     callback = (prev, current) =>
       [x, y] = current
-      if @cell_present(x, y) then prev += @grid[x][y] else prev
+      if @cell_present(x, y)
+        prev += @grid[x][y]
+      else
+        prev
     @neighbor_coordinates(row, col).reduce(callback, 0)
 
 
