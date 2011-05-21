@@ -1,4 +1,4 @@
-conways_rules = (num_neighbors, alive = true) ->
+conways_rules = (num_neighbors, alive) ->
   if alive
     num_neighbors in [2,3]
   else
@@ -36,14 +36,13 @@ describe "Conway's Game of Life", ->
   describe "Rules", ->
 
     describe "Living cell with", ->
-      for num_neighbors in [0, 1, 4, 5, 6, 7, 8]
-        do (num_neighbors) ->
-          it "should die when it has #{num_neighbors} neighbors", ->
-            expect(conways_rules(num_neighbors)).toBeFalsy()
+      for dead_neighbors in [0, 1, 4, 5, 6, 7, 8]
+        it "should die when it has #{dead_neighbors} neighbors", ->
+          expect(conways_rules(dead_neighbors, true)).toBeFalsy()
 
-      for num_neighbors in [2, 3]
-        it "should live when it has #{num_neighbors} neighbors", ->
-          expect(conways_rules(num_neighbors)).toBeTruthy()
+      for alive_neighbors in [2, 3]
+        it "should live when it has #{alive_neighbors} neighbors", ->
+          expect(conways_rules(alive_neighbors, true)).toBeTruthy()
 
     describe "Dead cell ", ->
       it "should live when it has 3 neighbors", ->
