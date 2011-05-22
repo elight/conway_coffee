@@ -30,6 +30,7 @@ class Grid
         @set_cell(x, y)
         next_grid[x][y] = @transition_cell()
     @grid = next_grid
+    @
 
   cell_alive: (cell) ->
     [x, y] = [cell.x, cell.y]
@@ -40,6 +41,9 @@ class Grid
       prev++ if @cell_alive(current)
       prev
     @neighbor_coordinates(@cell).reduce(callback, 0)
+
+  output: ->
+    @grid
 
 
 describe "Conway's Game of Life", ->
@@ -87,7 +91,7 @@ describe "Conway's Game of Life", ->
               expect(@test_grid.how_many_alive()).toEqual(0)
 
         it "should transition to its next state", ->
-          expect(@test_grid.transition()).toEqual(@input)
+          expect(@test_grid.transition().output()).toEqual(@input)
 
       describe "that is full", ->
         beforeEach ->
@@ -118,7 +122,7 @@ describe "Conway's Game of Life", ->
             [0, 0, 0],
             [1, 0, 1],
           ]
-          expect(@test_grid.transition()).toEqual(expected)
+          expect(@test_grid.transition().output()).toEqual(expected)
 
 
     describe "(4x4)", ->
@@ -140,7 +144,7 @@ describe "Conway's Game of Life", ->
             [0, 0, 0, 0],
             [1, 0, 0, 1]
           ]
-          expect(@test_grid.transition()).toEqual(expected)
+          expect(@test_grid.transition().output()).toEqual(expected)
 
     describe "(4x3)", ->
 
@@ -159,4 +163,4 @@ describe "Conway's Game of Life", ->
             [0, 0, 0, 0],
             [1, 0, 0, 1]
           ]
-          expect(@test_grid.transition()).toEqual(expected)
+          expect(@test_grid.transition().output()).toEqual(expected)
