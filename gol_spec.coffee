@@ -12,8 +12,8 @@ class Grid
     for delta_row in [-1..1]
       for delta_col in [-1..1]
         [x, y] = [row + delta_row, col + delta_col]
-        unless x == row and y == col
-          neighbors.push([x, y])
+        continue if x == row and y == col
+        neighbors.push([x, y])
     neighbors
 
   transition: ->
