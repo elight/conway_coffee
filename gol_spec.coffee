@@ -29,13 +29,14 @@ class Grid
   cell_present: (x, y) ->
     @grid[x]? and @grid[x][y]?
 
+  cell_alive: (x, y) ->
+    @grid[x][y] == 1
+
   how_many_alive: (row, col) ->
     callback = (prev, current) =>
       [x, y] = current
-      if @cell_present(x, y)
-        prev += @grid[x][y]
-      else
-        prev
+      prev++ if @cell_present(x, y) and @cell_alive(x, y)
+      prev
     @neighbor_coordinates(row, col).reduce(callback, 0)
 
 
