@@ -31,15 +31,16 @@ class Grid
     neighbors
 
   transition_cell: =>
-    neighbors = @how_many_alive()
-    if conways_rules(neighbors, @cell_alive(@cell)) then 1 else 0
+    num_neighbors = @how_many_alive()
+    if conways_rules(num_neighbors, @cell_alive(@cell)) then 1 else 0
 
   transition: ->
     @grid = @clone(@transition_cell)
     @
 
   cell_alive: (cell) ->
-    [x, y] = [cell.x, cell.y]
+    x = cell.x
+    y = cell.y
     @grid[x]? and @grid[x][y]? and @grid[x][y] == 1
 
   how_many_alive: ->
