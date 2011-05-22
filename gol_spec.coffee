@@ -10,17 +10,17 @@ class Grid
   set_cell: (x, y) ->
     @cell = {x: x, y: y}
 
-  neighbor_coordinates: (x, y) ->
+  neighbor_coordinates: (cell) ->
     neighbors = []
     for delta_x in [-1..1]
       for delta_y in [-1..1]
         continue if delta_x == 0 and delta_y == 0
-        neighbors.push [x + delta_x, y + delta_y]
+        neighbors.push {x: cell.x + delta_x, y: cell.y + delta_y}
     neighbors
 
   transition_cell: ->
     neighbors = @how_many_alive()
-    if conways_rules(neighbors, @cell_alive(@cell.x, @cell.y)) then 1 else 0
+    if conways_rules(neighbors, @cell_alive(@cell)) then 1 else 0
 
   transition: ->
     [height, width, next_grid] = [@grid.length, @grid[0].length, []]
@@ -31,15 +31,15 @@ class Grid
         next_grid[x][y] = @transition_cell()
     @grid = next_grid
 
-  cell_alive: (x, y) ->
+  cell_alive: (cell) ->
+    [x, y] = [cell.x, cell.y]
     @grid[x]? and @grid[x][y]? and @grid[x][y] == 1
 
   how_many_alive: ->
     callback = (prev, current) =>
-      [x, y] = current
-      prev++ if @cell_alive(x, y)
+      prev++ if @cell_alive(current)
       prev
-    @neighbor_coordinates(@cell.x, @cell.y).reduce(callback, 0)
+    @neighbor_coordinates(@cell).reduce(callback, 0)
 
 
 describe "Conway's Game of Life", ->
