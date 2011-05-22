@@ -15,12 +15,9 @@ class Grid
         neighbors.push [x + delta_x, y + delta_y]
     neighbors
 
-  transition_current_cell: ->
-    @transition_cell(@cell.x, @cell.y)
-
-  transition_cell: (x, y) ->
-    neighbors = @how_many_alive(x, y)
-    if conways_rules(neighbors, @cell_alive(x, y)) then 1 else 0
+  transition_cell: ->
+    neighbors = @how_many_alive(@cell.x, @cell.y)
+    if conways_rules(neighbors, @cell_alive(@cell.x, @cell.y)) then 1 else 0
 
   transition: ->
     [height, width, next_grid] = [@grid.length, @grid[0].length, []]
@@ -28,7 +25,7 @@ class Grid
       next_grid[x] = []
       for y in [0...width]
         @cell = {x: x, y: y}
-        next_grid[x][y] = @transition_current_cell()
+        next_grid[x][y] = @transition_cell()
     @grid = next_grid
 
   cell_alive: (x, y) ->
