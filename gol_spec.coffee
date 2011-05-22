@@ -6,9 +6,21 @@ conways_rules = (num_neighbors, alive) ->
 
 class Grid
   constructor: (@grid) ->
+    @height = @grid.length
+    @width = @grid[0].length
 
   set_cell: (x, y) ->
     @cell = {x: x, y: y}
+
+  clone: (callback) ->
+    next_grid = []
+    for x in [0...@height]
+      next_grid[x] = []
+      for y in [0...@width]
+        @set_cell(x, y)
+        next_grid[x][y] = callback()
+    next_grid
+
 
   neighbor_coordinates: (cell) ->
     neighbors = []
@@ -18,18 +30,12 @@ class Grid
         neighbors.push {x: cell.x + delta_x, y: cell.y + delta_y}
     neighbors
 
-  transition_cell: ->
+  transition_cell: =>
     neighbors = @how_many_alive()
     if conways_rules(neighbors, @cell_alive(@cell)) then 1 else 0
 
   transition: ->
-    [height, width, next_grid] = [@grid.length, @grid[0].length, []]
-    for x in [0...height]
-      next_grid[x] = []
-      for y in [0...width]
-        @set_cell(x, y)
-        next_grid[x][y] = @transition_cell()
-    @grid = next_grid
+    @grid = @clone(@transition_cell)
     @
 
   cell_alive: (cell) ->
@@ -124,6 +130,13 @@ describe "Conway's Game of Life", ->
           ]
           expect(@test_grid.transition().output()).toEqual(expected)
 
+        it "should transition multiple times", ->
+          expected = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+          ]
+          expect(@test_grid.transition().transition().output()).toEqual(expected)
 
     describe "(4x4)", ->
 
