@@ -11,19 +11,21 @@ class Grid
     neighbors = []
     for delta_row in [-1..1]
       for delta_col in [-1..1]
+        continue if delta_row == 0 and delta_col == 0
         [x, y] = [row + delta_row, col + delta_col]
-        continue if x == row and y == col
         neighbors.push([x, y])
     neighbors
+
+  transition_cell: (row, col) ->
+    neighbors = @how_many_alive(row, col)
+    if conways_rules(neighbors, @cell_alive(row, col)) then 1 else 0
 
   transition: ->
     [height, width, next_grid] = [@grid.length, @grid[0].length, []]
     for row in [0...height]
       next_grid[row] = []
       for col in [0...width]
-        alive = @grid[row][col]?
-        neighbors = @how_many_alive(row, col)
-        next_grid[row][col] = if conways_rules(neighbors, alive) then 1 else 0
+        next_grid[row][col] = @transition_cell(row, col)
     @grid = next_grid
 
   cell_present: (x, y) ->
